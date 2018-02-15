@@ -2,8 +2,12 @@
 require 'rails_helper'
 
 RSpec.describe Message, type: :model do
+	subject { create(:message) }
+	
 	# Validations
-	it { should validate_presence_of(:content) }
-	it { should validate_presence_of(:latitude) }
-	it { should validate_presence_of(:longitude) }
+	describe "validations" do
+		it { should validate_presence_of(:content) }
+		it { should validate_presence_of(:latitude) }
+		it { should validate_presence_of(:longitude) }
+	end
 end
