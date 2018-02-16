@@ -135,5 +135,35 @@ RSpec.describe "Message API", type: :request do
 				end
 			end
 		end
+
+		context "when type is valid" do
+			context "when requesting nearby messages" do
+				context "with a specific radius" do
+					let(:query_string) { "?#{nearby_type}&latitude=#{valid_latitude}&longitude=#{valid_longitude}&radius=#{specific_radius}" }
+
+					it "returns only messages within the radius" do
+						expect(JSON.parse(response.body)['messages'].size).to eq(4)
+					end
+				end
+			
+				context "without a specific radius" do
+					let(:query_string) { "?#{nearby_type}&latitude=#{valid_latitude}&longitude=#{valid_longitude}" }
+
+				  it "returns only messages within the default range" do
+						expect(JSON.parse(response.body)['messages'].size).to eq(5)
+					end
+				end
+			end
+
+			context "when requesting the nearest message" do
+				let(:query_string) { "?#{nearest_type}&latitude=#{valid_latitude}&longitude=#{valid_longitude}" }
+				
+				it "returns the nearest message" do
+					expect(response).to have_http_status(:ok)
+				end
+
+			end
+		end
+
 	end
 end
