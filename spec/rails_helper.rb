@@ -79,6 +79,7 @@ RSpec.configure do |config|
 
   config.around(:each) do |example|
     DatabaseCleaner.cleaning do
+      Rails.application.load_seed
       example.run
     end
   end
