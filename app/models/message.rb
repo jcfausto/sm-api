@@ -1,4 +1,11 @@
 class Message < ApplicationRecord
+	# To be able to compare two messages and decide which one is closer to a certain location
+	include Comparable
+
+	# Geocoder setup
+	require 'geocoder'
+	reverse_geocoded_by :latitude, :longitude
+	
 	# enable setting up the lenght of the message content via ENV var.
 	# case no value is defined, then 100 is the default length.
 	MESSAGE_CONTENT_LENGTH = ENV['MESSAGE_CONTENT_LENGTH'] || 100

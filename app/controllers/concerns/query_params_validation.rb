@@ -33,14 +33,12 @@ module QueryParamsValidation
 	end
 
 	def valid_radius?(params)
-		# if params is not defined then is not possible to validate and the most secure approach is to 
-		# assume that is not valid
-		if params
-			if params.include?(:radius)
-				((Float(params[:radius]) rescue false) && params[:radius].to_f.is_a?(Numeric))
-			end
+		# Radius is optional, so if not was defined, then this method will return true. 
+		# If radius is defined, then it must be validated.
+		if params && params.include?(:radius)
+			((Float(params[:radius]) rescue false) && params[:radius].to_f.is_a?(Numeric))
 		else
-			false
+			true
 		end
 	end
 end

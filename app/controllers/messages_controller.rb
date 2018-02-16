@@ -1,6 +1,8 @@
 # app/controllers/messages_controller.rb
 class MessagesController < ApplicationController
-	attr_reader :type, :longitude, :latitude
+	MAXIMUM_SEARCH_RADIUS_IN_KM = 100
+
+	attr_reader :type, :longitude, :latitude, :radius
 
 	# before callbacks
 	before_action :check_query_params, only: [:index]
@@ -18,14 +20,21 @@ class MessagesController < ApplicationController
 	def index
 		# all validations will happen before, so if the execution reached this point
 		# the parameters meet all the requirements and the query can be done.
+		notice = []
+		
 		if type == "nearby"
-			result = Message.all
+			data = Message.near([latitude, longitude], radius, :units => :km)
 		elsif type == "nearest"
-			result = Message.all
+			data = Message.near([latitude, longitude], radius, :units => :km, :order => "distance").first
 		end
-	
+
+		# If no result was found, return a message to the client
+		if !data
+			notice << "No message found within #{radius}KM radius"
+		end
+		
 		# return a response in JSON format and with status :ok
-		json_response({messages: result})
+		json_response({messages: data, notice: notice})
 	end
 
 	private
@@ -45,7 +54,7 @@ class MessagesController < ApplicationController
 		
 		# Although optional, the search radius can be defined via a query param. 
 		# If defined, this one will be used for searching nearby messages. 
-		# This param only applies to the nearby search* type.
+		# This param only applies to the nearby search type.
 		validation_message.push("Invalid radius") unless valid_radius?(params)
 		
 		if !validation_message.empty?
@@ -58,6 +67,14 @@ class MessagesController < ApplicationController
 		# At this point, check_query_params was already executed and is certain that to_f will not fail
 		@latitude = params[:latitude].to_f
 		@longitude = params[:longitude].to_f
+		@radius = MAXIMUM_SEARCH_RADIUS_IN_KM
+
+		# Maximum allowed user defined radius is less than MAXIMUM_SEARCH_RADIUS_IN_KM
+		# This limit was established in order to avoid heavy searches on the database.	
+		if (params[:radius] && params[:radius].to_f < MAXIMUM_SEARCH_RADIUS_IN_KM)
+			@radius = params[:radius].to_f
+		end
+
 	end
 
 	# Params sanitization
