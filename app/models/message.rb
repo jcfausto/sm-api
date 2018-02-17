@@ -1,16 +1,20 @@
+# app/models/message.rb
+##
+# This class define the Message model, its attributes and validations
 class Message < ApplicationRecord
-	# To be able to compare two messages and decide which one is closer to a certain location
-	include Comparable
-
 	# Geocoder setup
 	require 'geocoder'
 	reverse_geocoded_by :latitude, :longitude
-	
+
 	# Arbitrary default for message length
 	MESSAGE_CONTENT_LENGTH = 300
 
 	# Validations
-	# Validates content presence and length based on application setup
+	##
+	# Validations:
+	#   - :content presence and length based on application configuration.
+	#   - :latitude numericality and valid range
+	#   - :longitude numericality and valid range
 	validates_presence_of :content
 	validates_length_of :content, maximum: MESSAGE_CONTENT_LENGTH
 	# Validates presence, range and numericality of latitude
