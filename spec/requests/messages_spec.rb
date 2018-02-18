@@ -26,8 +26,8 @@ RSpec.describe "Message API", type: :request do
 	let(:invalid_params) { {message: { content: "Hi, you found me!", latitude: 52.54124, longitude: nil} }.to_json }
 
 	# POST /messages
-	describe "POST /messages" do
-		before { post "/messages", params: valid_params }
+	describe "POST /api/messages" do
+		before { post "/api/messages", params: valid_params }
 
 		context "when request is valid" do
 			it "creates the message" do
@@ -36,7 +36,7 @@ RSpec.describe "Message API", type: :request do
 		end
 
 		context "when request is invalid" do
-			before { post "/messages", params: invalid_params }
+			before { post "/api/messages", params: invalid_params }
 
 			context "when content is not defined" do
 				it "does not create the message" do
@@ -72,8 +72,8 @@ RSpec.describe "Message API", type: :request do
 
 
 	# GET /messages
-	describe "GET /messages" do
-		before { get "/messages#{query_string}" }
+	describe "GET /api/messages" do
+		before { get "/api/messages#{query_string}" }
 
 		context "when no type is defined" do
 			let(:query_string) { "" }
@@ -167,7 +167,8 @@ RSpec.describe "Message API", type: :request do
 				end
 
 				it "returns the nearest message" do
-					expect(JSON.parse(response.body)['result']['id']).to eq(145)
+					expect(JSON.parse(response.body)['result']['content'])
+						.to match(/Hello, I am a secret message near the mauerpark!/)
 				end
 
 			end
