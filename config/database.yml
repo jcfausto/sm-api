@@ -17,9 +17,14 @@
 default: &default
   adapter: postgresql
   encoding: unicode
+  # Refer to this article case you have trouble running locally with the
+  # postgres user (https://gist.github.com/p1nox/4953113)
+  username: postgres
+  password: <%= ENV['DATABASE_PASSWORD'] %>
   # For details on connection pooling, see Rails configuration guide
   # http://guides.rubyonrails.org/configuring.html#database-pooling
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  host: <%= ENV['POSTGRES_PORT_5432_TCP_ADDR'] || ENV['DATABASE_URL'] || (postgres rescue "localhost") %>
 
 development:
   <<: *default
@@ -81,5 +86,3 @@ test:
 production:
   <<: *default
   database: sm-api_production
-  username: sm-api
-  password: <%= ENV['SM-API_DATABASE_PASSWORD'] %>
