@@ -45,6 +45,7 @@ Overview below. For more details, check the
 | type       | nearby, nearest       | /messages?type=nearby        |
 | latitude   | Float number between -90 and 90 | /messages?type=nearby&latitude=52.54124 |
 | longitude  | Float number between -180 and 180 | /messages?type=nearby&latitude=52.54124&longitude=13.400241 |
+| radius       | Float number greater than 0 up to 100 |  /messages?type=nearby&latitude=52.54124&longitude=13.400241&radius=20        |
 
 # How to run this API
 
