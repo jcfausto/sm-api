@@ -35,7 +35,7 @@ class LocationValidator < BaseSearchFilterValidator
   # Validate if radius is a number and is within the limit
   def valid_radius?
     if radius
-      Float(radius) && radius.to_f <= MAXIMUM_SEARCH_RADIUS_IN_KM rescue false
+      (Float(radius) && radius.to_f > 0 &&  radius.to_f <= MAXIMUM_SEARCH_RADIUS_IN_KM) rescue false
     else
       true
     end

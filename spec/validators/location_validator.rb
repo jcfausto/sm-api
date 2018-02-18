@@ -4,6 +4,7 @@ require 'rails_helper'
 RSpec.describe LocationValidator do
   let(:valid_latidude) { 1 }
   let(:not_a_number) { "foo" }
+  let(:negative) { -1.0 }
   let(:latitude_out_of_range) { 90.000001 }
   let(:valid_longitude) { 2 }
   let(:longitude_out_of_range) { 180.000001 }
@@ -93,6 +94,14 @@ RSpec.describe LocationValidator do
           expect(subject.valid?).to be_falsy
         end
       end
+
+      context "when radius is negative" do
+        let(:valid_radius) { negative }
+        it "should return false" do
+          expect(subject.valid?).to be_falsy
+        end
+      end
+
     end
 
     describe "when params are valid" do
