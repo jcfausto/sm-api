@@ -40,9 +40,9 @@ Overview below. For more details, check the
 
 #### Query params
 
-| Param      | Valid values 				 | example		 |
-| -----------| ----------------------|----------|----------------|
-| type       | nearby, nearest       | /messages?type=nearby |
+| Param      | Valid values 				 | example		 
+| -----------| ----------------------|------------------------------|
+| type       | nearby, nearest       | /messages?type=nearby        |
 | latitude   | Float number between -90 and 90 | /messages?type=nearby&latitude=52.54124 |
 | longitude  | Float number between -180 and 180 | /messages?type=nearby&latitude=52.54124&longitude=13.400241 |
 
@@ -65,7 +65,7 @@ Overview below. For more details, check the
 ## Running locally
 
 ```
-$ git clone [link to repo]
+$ git clone [https://github.com/jcfausto/sm-api.git](https://github.com/jcfausto/sm-api.git)
 $ bundle install
 $ rake db:create
 $ rake db:migrate
