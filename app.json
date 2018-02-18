@@ -1,0 +1,8 @@
+{
+  "name": "Secret Messages API",
+  "description": "A service for storing and retrieving secret geolocated messages",
+  "image": "heroku/ruby",
+  "addons": [
+    "heroku-postgresql"
+  ]
+}
