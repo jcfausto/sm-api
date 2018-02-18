@@ -14,4 +14,9 @@
 !/tmp/.keep
 
 .byebug_history
+
+# SimpleCov generated files
 coverage
+
+# rdoc generated files
+doc
