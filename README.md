@@ -1,6 +1,6 @@
 # Secret Messages API
 
-Entrypoint: https://ancient-shelf-11063.herokuapp.com/
+Entrypoint: https://ancient-shelf-11063.herokuapp.com/api
 
 ## Services
 - Store geolocated messages
