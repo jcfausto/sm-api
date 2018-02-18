@@ -6,9 +6,6 @@ class Message < ApplicationRecord
 	require 'geocoder'
 	reverse_geocoded_by :latitude, :longitude
 
-	# Arbitrary default for message length
-	MESSAGE_CONTENT_LENGTH = 300
-
 	# Validations
 	##
 	# Validations:
@@ -19,10 +16,10 @@ class Message < ApplicationRecord
 	validates_length_of :content, maximum: MESSAGE_CONTENT_LENGTH
 	# Validates presence, range and numericality of latitude
 	validates_presence_of :latitude
-	validates_inclusion_of :latitude, in: -90..90
+	validates_inclusion_of :latitude, in: VALID_LATITUDE[:min]..VALID_LATITUDE[:max]
 	validates_numericality_of :latitude, on: :create
 	# Validates presence, range and numericality of longitude
 	validates_presence_of :longitude
-	validates_inclusion_of :longitude, in: -180..180
+	validates_inclusion_of :longitude, in: VALID_LONGITUDE[:min]..VALID_LONGITUDE[:max]
 	validates_numericality_of :longitude, on: :create
 end

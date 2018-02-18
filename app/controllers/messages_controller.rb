@@ -1,80 +1,68 @@
 # app/controllers/messages_controller.rb
+##
+# This controller is responsible for actions related to the :message resource
 class MessagesController < ApplicationController
-	MAXIMUM_SEARCH_RADIUS_IN_KM = 100
-
-	attr_reader :type, :longitude, :latitude, :radius
+	attr_reader :search_filter
 
 	# before callbacks
-	before_action :check_query_params, only: [:index]
 	before_action :set_search_params, only: [:index]
 
+	##
 	# POST /messages
+	# Creates a new message
 	def create
 		@message = Message.create!(message_params)
 		json_response(@message, :created)
-	rescue StandardError => e 
-		json_response({ message: e.message }, :unprocessable_entity)
+	rescue StandardError => error
+		json_response({ message: error.message }, :unprocessable_entity)
 	end
 
+	##
 	# GET /messages
+	# Fetch messages based on a search filter
+	# The search filter should be valid, otherwise a bad_request will be returned
 	def index
-		# all validations will happen before, so if the execution reached this point
-		# the parameters meet all the requirements and the query can be done.
-		notice = []
-		
-		if type == "nearby"
-			data = Message.near([latitude, longitude], radius, :units => :km)
-		elsif type == "nearest"
-			data = Message.near([latitude, longitude], radius, :units => :km, :order => "distance").first
-		end
 
-		# If no result was found, return a message to the client
-		if !data
-			notice << "No message found within #{radius}KM radius"
+		if search_filter.valid?
+			location = search_filter.location
+
+			# if the radius is not defined, then set it to the
+			# maximum allowed by default.
+			radius = MAXIMUM_SEARCH_RADIUS_IN_KM
+			radius = location.radius if location.radius
+
+			messages = Message.near(
+				[location.latitude, location.longitude],
+				radius, :units => :km,
+				:order => "distance"
+			)
+
+			if search_filter.message_type.type == :nearest
+				messages = messages.first
+			end
+
+			# return a response in JSON format and with status :ok
+			json_response({result: messages})
+		else
+			json_response({result:  search_filter.error_messages}, :bad_request)
 		end
-		
-		# return a response in JSON format and with status :ok
-		json_response({messages: data, notice: notice})
 	end
 
 	private
 
-	def check_query_params
-		validation_message = []
-
-		# Query string must have type, latitude and longitude parameters
-		validation_message.push("Invalid query params") unless valid_params?(params) 
-		
-		# Only nearby and nearest searches are supported at the moment.
-		# TODO: What if I want to support a new type of search??	
-		validation_message.push("Unsupported message type") unless valid_type?(params)
-		
-		# Provided location must have valid latitude and longitude.
-		validation_message.push("Invalid location") unless valid_location?(params)
-		
-		# Although optional, the search radius can be defined via a query param. 
-		# If defined, this one will be used for searching nearby messages. 
-		# This param only applies to the nearby search type.
-		validation_message.push("Invalid radius") unless valid_radius?(params)
-		
-		if !validation_message.empty?
-			json_response({message:  validation_message}, :bad_request)
-		end
+	def set_search_params
+		@search_filter = SearchFilterValidator.new(params)
 	end
 
-	def set_search_params
-		@type = params[:type]
-		# At this point, check_query_params was already executed and is certain that to_f will not fail
-		@latitude = params[:latitude].to_f
-		@longitude = params[:longitude].to_f
-		@radius = MAXIMUM_SEARCH_RADIUS_IN_KM
+	def get_messages
+		location = search_filter.location
+		latitude = location.latitude
+		longitude = location.longitude
+		radius = MAXIMUM_SEARCH_RADIUS_IN_KM #default system max search radius
+		radius = location.radius if location.radius
 
-		# Maximum allowed user defined radius is less than MAXIMUM_SEARCH_RADIUS_IN_KM
-		# This limit was established in order to avoid heavy searches on the database.	
-		if (params[:radius] && params[:radius].to_f < MAXIMUM_SEARCH_RADIUS_IN_KM)
-			@radius = params[:radius].to_f
-		end
-
+		logger.debug "get_messages: lat: #{latitude} lon: #{longitude} radius: #{radius}"
+		return Message.near([latitude, longitude], radius, :units => :km, :order => "distance")
 	end
 
 	# Params sanitization

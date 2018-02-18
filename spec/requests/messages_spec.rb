@@ -16,7 +16,7 @@ RSpec.describe "Message API", type: :request do
 	let(:valid_longitude) { 13.400241 }
 	# Invalid latitude
 	let(:invalid_latitude) { -90.000001 }
-	# Invalid longitude 
+	# Invalid longitude
 	let(:invalid_longitude) { 180.000001 }
 	# Valid params
 	let(:valid_params) do
@@ -37,7 +37,7 @@ RSpec.describe "Message API", type: :request do
 
 		context "when request is invalid" do
 			before { post "/messages", params: invalid_params }
-			
+
 			context "when content is not defined" do
 				it "does not create the message" do
 					expect(response).to have_http_status(:unprocessable_entity)
@@ -59,9 +59,9 @@ RSpec.describe "Message API", type: :request do
 			context "when latitude is invalid" do
 				it "does not create the message" do
 					expect(response).to have_http_status(:unprocessable_entity)
-				end	
+				end
 			end
-			
+
 			context "when longitude is invalid" do
 				it "does not create the message" do
 					expect(response).to have_http_status(:unprocessable_entity)
@@ -101,7 +101,7 @@ RSpec.describe "Message API", type: :request do
 
 			context "when only longitude is defined" do
 				let(:query_string) { "?#{nearby_type}&latitude=&longitude=#{valid_longitude}" }
-	
+
 				it "should return a bad request message" do
 					expect(response).to have_http_status(:bad_request)
 				end
@@ -112,24 +112,24 @@ RSpec.describe "Message API", type: :request do
 
 			context "and latitude is not a number" do
 				let(:query_string) { "?#{nearby_type}&latitude=foo&longitude=#{valid_longitude}" }
-	
+
 				it "should return a bad request message" do
 					expect(response).to have_http_status(:bad_request)
-				end	
+				end
 			end
 
 
 			context "when latitude is invalid" do
 				let(:query_string) { "?#{nearby_type}&latitude=#{invalid_latitude}&longitude=#{valid_longitude}" }
-	
+
 				it "should return a bad request message" do
 					expect(response).to have_http_status(:bad_request)
-				end		
+				end
 			end
 
 			context "when longitude is invalid" do
 				let(:query_string) { "?#{nearby_type}&latitude=#{valid_latitude}&longitude=#{invalid_longitude}" }
-				
+
 				it "should return a bad request message" do
 					expect(response).to have_http_status(:bad_request)
 				end
@@ -137,29 +137,37 @@ RSpec.describe "Message API", type: :request do
 		end
 
 		context "when type is valid" do
-			context "when requesting nearby messages" do
+			context "requesting nearby messages" do
 				context "with a specific radius" do
 					let(:query_string) { "?#{nearby_type}&latitude=#{valid_latitude}&longitude=#{valid_longitude}&radius=#{specific_radius}" }
 
 					it "returns only messages within the radius" do
-						expect(JSON.parse(response.body)['messages'].size).to eq(4)
+						expect(JSON.parse(response.body)['result'].size).to eq(4)
 					end
 				end
-			
+
 				context "without a specific radius" do
 					let(:query_string) { "?#{nearby_type}&latitude=#{valid_latitude}&longitude=#{valid_longitude}" }
 
 				  it "returns only messages within the default range" do
-						expect(JSON.parse(response.body)['messages'].size).to eq(5)
+						expect(JSON.parse(response.body)['result'].size).to eq(5)
 					end
 				end
 			end
 
 			context "when requesting the nearest message" do
 				let(:query_string) { "?#{nearest_type}&latitude=#{valid_latitude}&longitude=#{valid_longitude}" }
-				
+
 				it "returns the nearest message" do
 					expect(response).to have_http_status(:ok)
+				end
+
+				it "returns the nearest message" do
+					expect(JSON.parse(response.body).size).to eq(1)
+				end
+
+				it "returns the nearest message" do
+					expect(JSON.parse(response.body)['result']['id']).to eq(145)
 				end
 
 			end

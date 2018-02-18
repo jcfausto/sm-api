@@ -1,5 +1,5 @@
-class ApplicationController < ActionController::Base	
+# app/controllers/application_controller.rb
+class ApplicationController < ActionController::Base
 	# Includes
   include Response
-  include QueryParamsValidation
 end
