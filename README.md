@@ -66,7 +66,7 @@ Overview below. For more details, check the
 ## Running locally
 
 ```
-$ git clone [https://github.com/jcfausto/sm-api.git](https://github.com/jcfausto/sm-api.git)
+$ git clone https://github.com/jcfausto/sm-api.git
 $ bundle install
 $ rake db:create
 $ rake db:migrate
