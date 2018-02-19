@@ -7,6 +7,9 @@ Entrypoint: https://ancient-shelf-11063.herokuapp.com/api
 - Query nearby messages, with optional custom search radius
 - Query for the closest message to a certain position
 
+#### Notes on security
+Authentication and Authorization were not implemented. The API has this purposeful security issue because this is just an exercise. Real APIs must have authentication and authorization. Other issues were checked with Breakman that reported no issue other than the risk of Forgery attacks due to lack the mechanisms stated above.
+
 # Model
 
 #### Message
