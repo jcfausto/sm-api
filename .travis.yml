@@ -1,0 +1,10 @@
+language: ruby
+os: linux
+addons:
+  postgresql: "9.4"
+rvm:
+  - 2.5.0
+script:
+- RAILS_ENV=test bundle exec rake db:migrate --trace
+- bundle exec rake db:test:prepare
+- bundle exec rspec spec/* -fd
