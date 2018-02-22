@@ -1,4 +1,4 @@
-# app/validators/location_validator.rb
+# app/validators/location_validator_spec.rb
 
 ##
 # This class is responsible for validating a location. A location is composed
@@ -16,8 +16,8 @@ class LocationValidator < BaseSearchFilterValidator
   end
 
   def valid?
-    add_error("Invalid latitude or longitude") unless valid_lat_long?
-    add_error("Invalid radius") unless valid_radius?
+    add_error(ValidationMessages.invalid_location) unless valid_lat_long?
+    add_error(ValidationMessages.invalid_radius) unless valid_radius?
     return error_messages.empty?
   end
 

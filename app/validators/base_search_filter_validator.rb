@@ -1,4 +1,5 @@
 # app/validators/base_search_filter_validator.rb
+require_relative 'messages/validation_messages'
 
 ##
 # Base class for search filters validation

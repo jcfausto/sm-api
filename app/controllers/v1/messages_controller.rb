@@ -1,4 +1,5 @@
 # app/controllers/messages_controller.rb
+
 ##
 # This controller is responsible for actions related to the :message resource
 module V1
@@ -7,6 +8,9 @@ module V1
 
 		# before callbacks
 		before_action :set_search_params, only: [:index]
+
+		# Consts
+		ORDER_BY_DISTANCE = "distance".freeze
 
 		##
 		# POST /messages
@@ -35,7 +39,7 @@ module V1
 				messages = Message.near(
 					[location.latitude, location.longitude],
 					radius, :units => :km,
-					:order => "distance"
+					:order => ORDER_BY_DISTANCE
 				)
 
 				if search_filter.message_type.type == :nearest

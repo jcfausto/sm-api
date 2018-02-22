@@ -50,12 +50,22 @@ RSpec.describe LocationValidator do
         it "should return false" do
           expect(subject.valid?).to be_falsy
         end
+
+        it "should return invalid location message" do
+          subject.valid?
+          expect(subject.error_messages[0]).to eq(ValidationMessages.invalid_location)
+        end
       end
 
       context "when latitude is out of range" do
         let(:valid_latidude) { latitude_out_of_range }
         it "should return false" do
           expect(subject.valid?).to be_falsy
+        end
+
+        it "should return invalid location message" do
+          subject.valid?
+          expect(subject.error_messages[0]).to eq(ValidationMessages.invalid_location)
         end
       end
 
@@ -65,12 +75,22 @@ RSpec.describe LocationValidator do
         it "should return false" do
           expect(subject.valid?).to be_falsy
         end
+
+        it "should return invalid location message" do
+          subject.valid?
+          expect(subject.error_messages[0]).to eq(ValidationMessages.invalid_location)
+        end
       end
 
       context "when longitude is out out of range" do
         let(:valid_longitude) { longitude_out_of_range }
         it "should return false" do
           expect(subject.valid?).to be_falsy
+        end
+
+        it "should return invalid location message" do
+          subject.valid?
+          expect(subject.error_messages[0]).to eq(ValidationMessages.invalid_location)
         end
       end
 
@@ -79,12 +99,22 @@ RSpec.describe LocationValidator do
         it "should return false" do
           expect(subject.valid?).to be_falsy
         end
+
+        it "should return invalid location message" do
+          subject.valid?
+          expect(subject.error_messages[0]).to eq(ValidationMessages.invalid_location)
+        end
       end
 
       context "when radius is greater than the system default" do
         let(:valid_radius) { invalid_radius }
         it "should return false" do
           expect(subject.valid?).to be_falsy
+        end
+
+        it "should return invalid radius message" do
+          subject.valid?
+          expect(subject.error_messages[0]).to eq(ValidationMessages.invalid_radius)
         end
       end
 
@@ -93,12 +123,22 @@ RSpec.describe LocationValidator do
         it "should return false" do
           expect(subject.valid?).to be_falsy
         end
+
+        it "should return invalid radius message" do
+          subject.valid?
+          expect(subject.error_messages[0]).to eq(ValidationMessages.invalid_radius)
+        end
       end
 
       context "when radius is negative" do
         let(:valid_radius) { negative }
         it "should return false" do
           expect(subject.valid?).to be_falsy
+        end
+
+        it "should return invalid radius message" do
+          subject.valid?
+          expect(subject.error_messages[0]).to eq(ValidationMessages.invalid_radius)
         end
       end
 
@@ -120,6 +160,11 @@ RSpec.describe LocationValidator do
         it "should keep the informed radius" do
           expect(subject.radius).to be(valid_radius)
         end
+
+        it "should not have validation messages" do
+          subject.valid?
+          expect(subject.error_messages.size).to be_zero
+        end        
       end
 
     end
