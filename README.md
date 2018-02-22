@@ -1,6 +1,6 @@
 # Secret Messages API
 
-[![Build Status](https://travis-ci.org/jcfausto/sm-api.svg?branch=master)](https://travis-ci.org/jcfausto/sm-api) [![security](https://hakiri.io/github/jcfausto/sm-api/master.svg)](https://hakiri.io/github/jcfausto/sm-api/master)
+[![Build Status](https://travis-ci.org/jcfausto/sm-api.svg?branch=master)](https://travis-ci.org/jcfausto/sm-api) [![security](https://hakiri.io/github/jcfausto/sm-api/master.svg)](https://hakiri.io/github/jcfausto/sm-api/master) [![Maintainability](https://api.codeclimate.com/v1/badges/7f0d48b504aaeb997bfa/maintainability)](https://codeclimate.com/github/jcfausto/sm-api/maintainability) [![Test Coverage](https://api.codeclimate.com/v1/badges/7f0d48b504aaeb997bfa/test_coverage)](https://codeclimate.com/github/jcfausto/sm-api/test_coverage)
 
 Entrypoint: https://ancient-shelf-11063.herokuapp.com/api
 
