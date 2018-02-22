@@ -13,7 +13,7 @@ class MessageTypeValidator < BaseSearchFilterValidator
   end
 
   def valid?
-    add_error("Type #{type} not supported") unless
+    add_error(ValidationMessages.unsupported_message_query_type) unless
       VALID_MESSAGE_TYPES.keys.include?(type)
     return error_messages.empty?
   end
