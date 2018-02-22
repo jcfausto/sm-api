@@ -1,5 +1,7 @@
 # Secret Messages API
 
+[![Build Status](https://travis-ci.org/jcfausto/sm-api.svg?branch=master)](https://travis-ci.org/jcfausto/sm-api)
+
 Entrypoint: https://ancient-shelf-11063.herokuapp.com/api
 
 ## Services
