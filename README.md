@@ -4,6 +4,8 @@
 
 Entrypoint: https://ancient-shelf-11063.herokuapp.com/api
 
+Status Page: https://stats.uptimerobot.com/Pz866IOz2
+
 ## Services
 - Store geolocated messages
 - Query nearby messages, with optional custom search radius
