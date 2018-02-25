@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # app/validators/location_validator_spec.rb
 
 ##
@@ -8,17 +10,15 @@ class LocationValidator < BaseSearchFilterValidator
 
   def initialize(params)
     super()
-    if params
-      @latitude = params[:latitude]
-      @longitude = params[:longitude]
-      @radius = params[:radius]
-    end
+    @latitude = params[:latitude] if params
+    @longitude = params[:longitude] if params
+    @radius = params[:radius] if params
   end
 
   def valid?
     add_error(ValidationMessages.invalid_location) unless valid_lat_long?
-    add_error(ValidationMessages.invalid_radius) unless valid_radius?
-    return error_messages.empty?
+    add_error(ValidationMessages.invalid_radius) if radius && !valid_radius?
+    error_messages.empty?
   end
 
   private
@@ -26,19 +26,28 @@ class LocationValidator < BaseSearchFilterValidator
   ##
   # Validate if latitude and longitude are numbers and within the range
   def valid_lat_long?
-    (Float(latitude) && Float(longitude) rescue false) &&
-    latitude.to_f.between?(VALID_LATITUDE[:min], VALID_LATITUDE[:max]) &&
-    longitude.to_f.between?(VALID_LONGITUDE[:min], VALID_LONGITUDE[:max])
+    float?(latitude) && float?(longitude) &&
+      latitude.to_f.between?(VALID_LATITUDE[:min], VALID_LATITUDE[:max]) &&
+      longitude.to_f.between?(VALID_LONGITUDE[:min], VALID_LONGITUDE[:max])
   end
 
   ##
   # Validate if radius is a number and is within the limit
   def valid_radius?
-    if radius
-      (Float(radius) && radius.to_f > 0 &&  radius.to_f <= MAXIMUM_SEARCH_RADIUS_IN_KM) rescue false
-    else
-      true
-    end
+    float?(radius) && valid_search_radius?(radius.to_f)
   end
 
+  ##
+  # Checks if radius is valid from product's rules perspective
+  def valid_search_radius?(radius)
+    radius.positive? && radius <= MAXIMUM_SEARCH_RADIUS_IN_KM
+  end
+
+  ##
+  # Validates if the value is a Float number
+  def float?(value)
+    true if Float(value)
+  rescue StandardError
+    false
+  end
 end
