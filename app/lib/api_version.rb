@@ -24,6 +24,6 @@ class ApiVersion
   # Check if a version was defined in Accept header
   def check_headers(headers)
     accept = headers[:accept]
-    accept && accept.include?("application/vnd.messages.#{version}+json")
+    accept&.include?("application/vnd.messages.#{version}+json")
   end
 end

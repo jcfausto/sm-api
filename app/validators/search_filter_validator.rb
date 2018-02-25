@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # app/controllers/concerns/search_filter_validator.rb
 
 ##
@@ -11,10 +13,12 @@ class SearchFilterValidator < BaseSearchFilterValidator
     @location = LocationValidator.new(params)
   end
 
+  ##
+  # Search filter is valid when message query type is supported
+  # and location is valid
   def valid?
     add_error(message_type.error_messages) unless message_type.valid?
     add_error(location.error_messages) unless location.valid?
-    return error_messages.empty?
+    error_messages.empty?
   end
-
 end

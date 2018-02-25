@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # app/validators/base_search_filter_validator.rb
 require_relative 'messages/validation_messages'
 

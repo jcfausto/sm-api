@@ -1,5 +1,8 @@
+# frozen_string_literal: true
+
 # app/controllers/concerns/response.rb
 
+##
 # A little helper for simplifying json response generation.
 # It responds with 200 by default
 module Response
