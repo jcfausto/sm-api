@@ -20,3 +20,6 @@ coverage
 
 # rdoc generated files
 doc
+
+# vim buffers
+*.swp
