@@ -17,4 +17,4 @@ EXPOSE 3000
 
 ENTRYPOINT ["bundle", "exec"]
 
-CMD ["rails", "s", "-b", "0.0.0.0"]
+CMD ["passenger", "start", "-p", "3000", "--max-pool-size", "3"]
