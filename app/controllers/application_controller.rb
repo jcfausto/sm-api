@@ -7,4 +7,8 @@
 class ApplicationController < ActionController::Base
   # Includes
   include Response
+
+  def unauthorized_route
+    json_response({status: "unauthorized"}, :unauthorized)
+  end
 end
