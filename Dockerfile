@@ -13,8 +13,9 @@ RUN gem install bundler && bundle install --jobs 20 --retry 5
 
 COPY . ./
 
+# This is ignored by Heroku. The app must listen on $PORT
 EXPOSE 3000
 
 ENTRYPOINT ["bundle", "exec"]
 
-CMD ["passenger", "start", "-p", "3000", "--max-pool-size", "3"]
+CMD passenger start -p $PORT --max-pool-size 3
