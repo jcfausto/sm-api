@@ -8,9 +8,7 @@ RSpec.describe LocationValidator do
   let(:latitude_out_of_range) { 90.000001 }
   let(:valid_longitude) { 2 }
   let(:longitude_out_of_range) { 180.000001 }
-  let(:valid_radius) { 50.0 }
-  let(:invalid_radius) { 200.0 }
-  let(:valid_params) { { latitude: valid_latidude, longitude: valid_longitude, radius: valid_radius } }
+  let(:valid_params) { { latitude: valid_latidude, longitude: valid_longitude } }
   let(:params_without_radius) { { latitude: valid_latidude, longitude: valid_longitude } }
   subject { described_class.new(valid_params) }
 
@@ -23,10 +21,6 @@ RSpec.describe LocationValidator do
       it "should initialize longitude" do
         expect(subject.longitude).to eq(valid_longitude)
       end
-
-      it "should initialize radius" do
-        expect(subject.radius).to eq(valid_radius)
-      end
     end
 
     context "when params is missing" do
@@ -38,7 +32,6 @@ RSpec.describe LocationValidator do
       it "should initialize location attributes as nil" do
         expect(subject.latitude).to be_nil
         expect(subject.longitude).to be_nil
-        expect(subject.radius).to be_nil
       end
     end
   end
@@ -105,68 +98,30 @@ RSpec.describe LocationValidator do
           expect(subject.error_messages[0]).to eq(ValidationMessages.invalid_location)
         end
       end
-
-      context "when radius is greater than the system default" do
-        let(:valid_radius) { invalid_radius }
-        it "should return false" do
-          expect(subject.valid?).to be_falsy
-        end
-
-        it "should return invalid radius message" do
-          subject.valid?
-          expect(subject.error_messages[0]).to eq(ValidationMessages.invalid_radius)
-        end
-      end
-
-      context "when radius is not a number" do
-        let(:valid_radius) { not_a_number }
-        it "should return false" do
-          expect(subject.valid?).to be_falsy
-        end
-
-        it "should return invalid radius message" do
-          subject.valid?
-          expect(subject.error_messages[0]).to eq(ValidationMessages.invalid_radius)
-        end
-      end
-
-      context "when radius is negative" do
-        let(:valid_radius) { negative }
-        it "should return false" do
-          expect(subject.valid?).to be_falsy
-        end
-
-        it "should return invalid radius message" do
-          subject.valid?
-          expect(subject.error_messages[0]).to eq(ValidationMessages.invalid_radius)
-        end
-      end
-
     end
 
-    describe "when params are valid" do
-      context "when radius is not in params" do
-        subject { described_class.new(params_without_radius) }
-        it "should return true" do
-          expect(subject.valid?).to be_truthy
-        end
-      end
-
-      context "when radius is in params" do
-        it "should return true" do
-          expect(subject.valid?).to be_truthy
-        end
-
-        it "should keep the informed radius" do
-          expect(subject.radius).to be(valid_radius)
-        end
-
-        it "should not have validation messages" do
-          subject.valid?
-          expect(subject.error_messages.size).to be_zero
-        end        
-      end
-
-    end
+    # describe "when params are valid" do
+    #   context "when radius is not in params" do
+    #     subject { described_class.new(params_without_radius) }
+    #     it "should return true" do
+    #       expect(subject.valid?).to be_truthy
+    #     end
+    #   end
+    #
+    #   context "when radius is in params" do
+    #     it "should return true" do
+    #       expect(subject.valid?).to be_truthy
+    #     end
+    #
+    #     it "should keep the informed radius" do
+    #       expect(subject.radius).to be(valid_radius)
+    #     end
+    #
+    #     it "should not have validation messages" do
+    #       subject.valid?
+    #       expect(subject.error_messages.size).to be_zero
+    #     end
+    #   end
+    # end
   end
 end
