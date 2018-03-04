@@ -51,5 +51,12 @@ RSpec.describe SearchRadiusValidator do
         expect(subject.error_messages[0]).to eq(ValidationMessages.invalid_radius)
       end
     end
+
+    context "when radius is valid" do
+      let(:valid_radius) { 50.0 }
+      it "should be valid" do
+        expect(subject.valid?).to be_truthy
+      end
+    end
   end
 end

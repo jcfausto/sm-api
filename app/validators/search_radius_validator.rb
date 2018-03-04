@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # app/validators/search_radius_validator.rb
 
 ##
@@ -20,7 +22,8 @@ class SearchRadiusValidator < BaseSearchFilterValidator
   ##
   # Validate if radius is a number and is within the limit
   def valid_radius?
-    return false unless radius = float?(radius)
-    radius.positive? && radius <= MAXIMUM_SEARCH_RADIUS_IN_KM
+    float?(radius) &&
+      radius.to_f.positive? &&
+      radius.to_f <= MAXIMUM_SEARCH_RADIUS_IN_KM
   end
 end
