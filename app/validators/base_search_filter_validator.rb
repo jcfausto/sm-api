@@ -14,7 +14,17 @@ class BaseSearchFilterValidator
 
   protected
 
+  ##
+  # Add an error message to error_messages object
   def add_error(error)
     error_messages << error
+  end
+
+  ##
+  # Validates if the value is a Float number
+  def float?(value)
+    true if Float(value)
+  rescue StandardError
+    false
   end
 end
