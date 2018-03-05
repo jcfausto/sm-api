@@ -2,6 +2,8 @@
 require 'rails_helper'
 
 RSpec.describe "Message API", type: :request do
+	HMAC_SECRET = Rails.application.secrets.secret_key_base
+
 	# Message type: Nearest
 	let(:nearest_type) { "type=nearest" }
 	# Message type: Nearby
@@ -22,12 +24,20 @@ RSpec.describe "Message API", type: :request do
 	let(:valid_params) do
 		{message: attributes_for(:message)}
 	end
+
 	# Invalid params
 	let(:invalid_params) { {message: { content: "Hi, you found me!", latitude: 52.54124, longitude: nil} }.to_json }
 
+	let(:user) { create(:user) }
+
+	let!(:auth_token) { JWT.encode({ user_id: user.id }, HMAC_SECRET) }
+
+	# headers
+	let(:header) { {authorization: auth_token } }
+
 	# POST /messages
 	describe "POST /api/messages" do
-		before { post "/api/messages", params: valid_params }
+		before { post "/api/messages", headers: header, params: valid_params }
 
 		context "when request is valid" do
 			it "creates the message" do
@@ -36,7 +46,7 @@ RSpec.describe "Message API", type: :request do
 		end
 
 		context "when request is invalid" do
-			before { post "/api/messages", params: invalid_params }
+			before { post "/api/messages", headers: header, params: invalid_params }
 
 			context "when content is not defined" do
 				it "does not create the message" do
@@ -70,10 +80,9 @@ RSpec.describe "Message API", type: :request do
 		end
 	end
 
-
 	# GET /messages
 	describe "GET /api/messages" do
-		before { get "/api/messages#{query_string}" }
+		before { get "/api/messages#{query_string}", headers: header }
 
 		context "when no type is defined" do
 			let(:query_string) { "" }
